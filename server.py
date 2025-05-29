@@ -227,7 +227,7 @@ async def get_html(url: str, retries: int = 5, proxy: str = None):
 async def get_wf(path: str):
     baseurl = "https://api.warframestat.us/"
     url = urljoin(baseurl, path)
-    get_html(url)
+    return {"url": url}
 
 # Main entry point
 if __name__ == "__main__":
