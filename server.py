@@ -6,6 +6,8 @@ from urllib.parse import urljoin, urlparse
 import tempfile
 import hashlib
 
+from fastapi.responses import JSONResponse
+
 from CloudflareBypasser import CloudflareBypasser
 from DrissionPage import ChromiumPage, ChromiumOptions
 from fastapi import FastAPI, HTTPException, Response
@@ -215,7 +217,7 @@ async def get_html(url: str, retries: int = 5, proxy: str = None):
         driver = bypass_cloudflare(url, retries, log, proxy)
         html = driver.html
         cookies_json = {cookie.get("name", ""): cookie.get("value", " ") for cookie in driver.cookies()}
-        response = Response(content=html, media_type="text/html")
+        response = JSONResponse(content=html, media_type="application/json")
         response.headers["cookies"] = json.dumps(cookies_json)
         response.headers["user_agent"] = driver.user_agent
         driver.quit()
