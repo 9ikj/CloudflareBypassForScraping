@@ -215,9 +215,9 @@ async def get_html(url: str, retries: int = 5, proxy: str = None):
         raise HTTPException(status_code=400, detail="Invalid URL")
     try:
         driver = bypass_cloudflare(url, retries, log, proxy)
-        json = driver.json
+        jsonContent = driver.json
         cookies_json = {cookie.get("name", ""): cookie.get("value", " ") for cookie in driver.cookies()}
-        response = JSONResponse(content=json, media_type="application/json")
+        response = JSONResponse(content=jsonContent, media_type="application/json")
         response.headers["cookies"] = json.dumps(cookies_json)
         response.headers["user_agent"] = driver.user_agent
         driver.quit()
