@@ -191,22 +191,22 @@ def bypass_cloudflare(url: str, retries: int, log: bool, proxy: str = None) -> C
 
 
 # Endpoint to get cookies
-@app.get("/cookies", response_model=CookieResponse)
-async def get_cookies(url: str, retries: int = 5, proxy: str = None):
-    if not is_safe_url(url):
-        raise HTTPException(status_code=400, detail="Invalid URL")
-    try:
-        driver = bypass_cloudflare(url, retries, log, proxy)
-        cookies = {cookie.get("name", ""): cookie.get("value", " ") for cookie in driver.cookies()}
-        user_agent = driver.user_agent
-        driver.quit()
-        return CookieResponse(cookies=cookies, user_agent=user_agent)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+# @app.get("/cookies", response_model=CookieResponse)
+# async def get_cookies(url: str, retries: int = 5, proxy: str = None):
+#     if not is_safe_url(url):
+#         raise HTTPException(status_code=400, detail="Invalid URL")
+#     try:
+#         driver = bypass_cloudflare(url, retries, log, proxy)
+#         cookies = {cookie.get("name", ""): cookie.get("value", " ") for cookie in driver.cookies()}
+#         user_agent = driver.user_agent
+#         driver.quit()
+#         return CookieResponse(cookies=cookies, user_agent=user_agent)
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))
 
 
-# Endpoint to get HTML content and cookies
-@app.get("/html")
+# # Endpoint to get HTML content and cookies
+# @app.get("/html")
 async def get_html(url: str, retries: int = 5, proxy: str = None):
     if not is_safe_url(url):
         raise HTTPException(status_code=400, detail="Invalid URL")
@@ -222,6 +222,11 @@ async def get_html(url: str, retries: int = 5, proxy: str = None):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
+@app.get("/{path}")
+async def get_wf(path: str):
+    url = f"https://api.warframestat.us/{path}"
+    get_html(url)
 
 # Main entry point
 if __name__ == "__main__":
