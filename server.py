@@ -1,7 +1,7 @@
 import json
 import re
 import os
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 import tempfile
 import hashlib
 
@@ -223,9 +223,10 @@ async def get_html(url: str, retries: int = 5, proxy: str = None):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/{path}")
+@app.get("/{path:path}")
 async def get_wf(path: str):
-    url = f"https://api.warframestat.us/{path}"
+    baseurl = "https://api.warframestat.us/"
+    url = urljoin(baseurl, path)
     get_html(url)
 
 # Main entry point
