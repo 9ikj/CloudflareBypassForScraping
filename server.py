@@ -223,7 +223,7 @@ async def get_html(url: str, retries: int = 5, proxy: str = None):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/{path:path}")
+@app.get("/proxy/{path:path}")
 async def get_wf(path: str):
     baseurl = "https://api.warframestat.us/"
     url = urljoin(baseurl, path)
