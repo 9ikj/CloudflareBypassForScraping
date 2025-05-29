@@ -1,3 +1,4 @@
+import html
 import json
 import re
 import os
@@ -223,11 +224,12 @@ async def get_html(url: str, retries: int = 5, proxy: str = None):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/proxy/{path:path}")
+@app.get("/{path:path}")
 async def get_wf(path: str):
     baseurl = "https://api.warframestat.us/"
     url = urljoin(baseurl, path)
-    return {"url": url}
+    html = await get_html(url)
+    return html
 
 # Main entry point
 if __name__ == "__main__":
